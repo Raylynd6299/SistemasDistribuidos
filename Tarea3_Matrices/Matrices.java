@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 
 public class Matrices {
     static Object lock = new Object();
-    static int N = 1000;
+    static int N = 4;
     static int[][] A = new int[N][N];
     static int[][] B = new int[N][N];
     static int[][] C = new int[N][N];
@@ -191,8 +191,8 @@ public class Matrices {
         }
     }
 
-    static int ChecksumMatriz(int[][] mat,int nm){
-        int check = 0;
+    static long ChecksumMatriz(int[][] mat,int nm){
+        long check = 0;
         for (int fila = 0; fila < nm ; fila ++){
             for(int columna = 0; columna < nm ; columna++){
                 check += mat[fila][columna];
@@ -221,7 +221,7 @@ public class Matrices {
             
             //Trasponer B
 
-            ServerSocket servidor = new ServerSocket(50000);
+            ServerSocket servidor = new ServerSocket(60000);
             Worker w[] = new Worker[4];
 
             int i = 0;
@@ -252,7 +252,7 @@ public class Matrices {
             Socket conexion = null;
             for(;;)
                 try {
-                    conexion = new Socket("localhost",50000);
+                    conexion = new Socket("localhost",60000);
                     break;                    
                 } catch (Exception e) {
                     Thread.sleep(100);
@@ -273,15 +273,21 @@ public class Matrices {
             An = new int[numCol/2][numCol];
             Bn = new int[numCol/2][numCol];//
             Cn = new int[numCol/2][numCol/2];//
+
+            for(int f = 0;f < numCol/2; f++){
+                for(int c = 0;c < numCol/2;c++){
+                    Cn[f][c] = 0;
+                }
+            }
+
             //Recibo mi parte de A
             for (int fila = 0; fila < numCol/2 ; fila++){
                 rowC = new byte[8*N];
                 read(entrada,rowC,0,N*8);
                 row = ByteBuffer.wrap(rowC);
-                for(int columna = 0; columna < N ; columna++){
+                for(int columna = 0; columna < numCol ; columna++){
                     
-                    An[fila][columna] = row.getInt();
-                
+                    An[fila][columna] = row.getInt();                
                 }
             }
 
@@ -291,22 +297,25 @@ public class Matrices {
                 rowC = new byte[8*N];
                 read(entrada,rowC,0,N*8);
                 row = ByteBuffer.wrap(rowC);
-                for(int columna = 0; columna < N ; columna++){
+                for(int columna = 0; columna < numCol; columna++){
                     Bn[fila][columna] = row.getInt();
                 }
             }
 
             //Obtengo mi parte de C
-            for (int i = 0; i < numCol/2; i++)
-                for (int j = 0; j < numCol/2; j++)
-                    for (int k = 0; k < numCol; k++)
-                        C[i][j] += A[i][k] * B[j][k];
-
+            for (int i = 0; i < numCol/2; i++){
+                for (int j = 0; j < numCol/2; j++){
+                    for (int k = 0; k < numCol; k++){
+                        Cn[i][j] += An[i][k] * Bn[j][k];
+                    }
+                }
+            }
+            
             //Envio mi parte de C
             for (int fila = 0;fila < numCol/2; fila++){
                 row = ByteBuffer.allocate((numCol/2)*8);
                 for (int columna = 0; columna < numCol/2 ; columna++){
-                    row.putInt(B[fila][columna]);
+                    row.putInt(Cn[fila][columna]);
                 }
                 rowC = row.array();
                 salida.write(rowC);
