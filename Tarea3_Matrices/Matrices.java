@@ -6,11 +6,12 @@ import java.nio.ByteBuffer;
 
 public class Matrices {
     static Object lock = new Object();
-    static int N = 4;
+    static int N = 1000;
     static int[][] A = new int[N][N];
     static int[][] B = new int[N][N];
     static int[][] C = new int[N][N];
 
+   
     static void read(DataInputStream f,byte[] b,int posicion,int longitud) throws Exception{
         while (longitud > 0){
         int n = f.read(b,posicion,longitud);
@@ -28,7 +29,7 @@ public class Matrices {
                DataOutputStream salida = new DataOutputStream(conexion.getOutputStream());
                DataInputStream entrada = new DataInputStream(conexion.getInputStream());
                
-               int nodoConec = 0;
+               int nodoConec;
                ByteBuffer row ;
                byte[] rowC ;
                
@@ -167,7 +168,7 @@ public class Matrices {
                         for(int columna = N/2; columna < N ; columna++){
                             synchronized(lock) {
                                 C[fila][columna] = row.getInt();
-                            }                            
+                            } 
                         }
                     }
                }
@@ -219,7 +220,6 @@ public class Matrices {
                 }
             } 
             
-            //Trasponer B
 
             ServerSocket servidor = new ServerSocket(60000);
             Worker w[] = new Worker[4];
@@ -231,7 +231,7 @@ public class Matrices {
                 w[i].start();
                 i++;
             }
-
+            i=0;
             
             while(i < 4){
                 w[i].join();
@@ -266,6 +266,7 @@ public class Matrices {
             int[][] An;
             int[][] Bn;
             int[][] Cn;//
+
             //Envio el nodo en el que estoy
             salida.writeInt(nodo);
             int numCol = entrada.readInt();
@@ -273,6 +274,7 @@ public class Matrices {
             An = new int[numCol/2][numCol];
             Bn = new int[numCol/2][numCol];//
             Cn = new int[numCol/2][numCol/2];//
+
 
             for(int f = 0;f < numCol/2; f++){
                 for(int c = 0;c < numCol/2;c++){
@@ -286,8 +288,7 @@ public class Matrices {
                 read(entrada,rowC,0,N*8);
                 row = ByteBuffer.wrap(rowC);
                 for(int columna = 0; columna < numCol ; columna++){
-                    
-                    An[fila][columna] = row.getInt();                
+                    An[fila][columna] = row.getInt();
                 }
             }
 
@@ -310,6 +311,7 @@ public class Matrices {
                     }
                 }
             }
+
             
             //Envio mi parte de C
             for (int fila = 0;fila < numCol/2; fila++){

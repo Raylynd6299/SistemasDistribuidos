@@ -3,9 +3,9 @@ class MultiplicacionMatriz_2 {
     static int[][] A = new int[N][N];
     static int[][] B = new int[N][N];
     static int[][] C = new int[N][N];
-    static void MostrarMatriz(int[][] mat,int nm){
-        for (int fila = 0; fila < nm ; fila ++){
-            for(int columna = 0; columna < nm ; columna++){
+    static void MostrarCuartoMatriz(int[][] mat){
+        for (int fila = 500; fila < 504 ; fila ++){
+            for(int columna = 500; columna < 504 ; columna++){
                 System.out.printf("%d ",mat[fila][columna]);
             }
             System.out.printf("\n");
