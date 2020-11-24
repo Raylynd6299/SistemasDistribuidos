@@ -2,16 +2,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.sql.Timestamp;
 
-class EjemploGSON
-{
-  static class Empleado
-  {
+class EjemploGSON {
+
+  static class Empleado {
+
     String nombre;
     int edad;    
     float sueldo;
     Timestamp fecha_ingreso;
-    Empleado(String nombre,int edad,float sueldo,Timestamp fecha_ingreso)
-    {
+    Empleado(String nombre,int edad,float sueldo,Timestamp fecha_ingreso) {
       this.nombre = nombre;
       this.edad = edad;
       this.sueldo = sueldo;
@@ -19,8 +18,8 @@ class EjemploGSON
     }
   }
 
-  public static void main(String[] args)
-  {
+  public static void main(String[] args) {
+    
     Empleado[] e = new Empleado[3];
     e[0] = new Empleado("Hugo",20,1000,Timestamp.valueOf("2020-01-01 20:10:00"));
     e[1] = new Empleado("Paco",21,2000,Timestamp.valueOf("2019-10-01 10:15:00"));
