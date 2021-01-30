@@ -270,13 +270,13 @@ public class Servicio{
   @Path("borrar_usuarios")
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response borrar_usuarios(@FormParam("borrar_usuarios")String cmm) throws Error {
+  public Response borrar_usuarios() throws Error {
     Connection conexion = pool.getConnection();
     try{
-        PreparedStatement stmt_1 = conexion.prepareStatement("Delete from fotos_usuarios");
-        try{stmt_1.executeUpdate(); }finally{stmt_1.close();}
-        stmt_1 = conexion.prepareStatement("Delete from usuarios");
-        try{stmt_1.executeUpdate(); }finally{stmt_1.close();}
+        PreparedStatement stmt_borrar = conexion.prepareStatement("Delete from fotos_usuarios");
+        try{stmt_borrar.executeUpdate(); }finally{stmt_borrar.close();}
+        stmt_borrar = conexion.prepareStatement("Delete from usuarios");
+        try{stmt_borrar.executeUpdate(); }finally{stmt_borrar.close();}
     }catch (Exception e) {
             return Response.status(400).entity(j.toJson(new Error(e.getMessage()))).build();
     }

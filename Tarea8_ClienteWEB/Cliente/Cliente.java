@@ -26,7 +26,6 @@ public class Cliente{
             conexionServicio.setRequestMethod( "POST" );
             conexionServicio.setRequestProperty( "Content-Type" , "application/x-www-form-urlencoded" );
             lector = new BufferedReader(new InputStreamReader(System.in));
-            payload="";
         }catch(Exception e){
             System.out.println("Ocurrio un Error al crear la conexion: "+e.getMessage());
             System.exit(1);

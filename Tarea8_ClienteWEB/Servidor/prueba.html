@@ -123,17 +123,19 @@
 						alert(JSON.stringify(result));
 				});
 			}
+
             function borrando_todo(){
                 var cliente = new WSClient("/Servicio/rest/ws");
                 cliente.post("borrar_usuarios",{
-                   borrar_usuarios:get("borrar_usuarios").value
+					
                 },function(code,result){
                     if(code == 200)
                         alert("OK");
                     else
                         alert(JSON.stringify(result));
                 });
-            }   
+			}   
+			
 			function modifica()
 			{
 				var cliente = new WSClient("/Servicio/rest/ws");
@@ -259,7 +261,6 @@
 			<button type="button" onclick="limpia_consulta();muestra_pantalla(get('consulta_usuario'))" style="width:200px">Consulta usuario</button></br>
 			<button type="button" onclick="limpia_borra();muestra_pantalla(get('borra_usuario'))" style="width:200px">Borra usuario</button></br>
             <button type="button" onclick="borrando_todo();" style="width:200px"> Borrar todos los usuarios </button>
-            <input type="hidden" id="borrar_usuarios" value="all" >
 		</div>
 	</body>
 </html>
